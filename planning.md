@@ -143,6 +143,52 @@ If a label is still difficult to collect, I will either collect more than 200 to
 
 ---
 
+## Data Collection and Annotation Results
+
+I collected and annotated my dataset using public r/GenshinImpact posts and comments. The dataset is saved as one CSV file with the required `text` and `label` columns, plus a `notes` column for short notes about difficult or borderline cases. I did not pre-split the file because the project notebook will handle the train, validation, and test split automatically.
+
+During collection, I filtered out deleted posts, removed posts, image-only posts, meme-only posts, pure self-promotion, and posts that could not be understood without text. I focused on examples that fit my three planned labels: `gameplay_advice`, `lore_analysis`, and `reaction_opinion`.
+
+### Final Label Distribution
+
+| Label              |   Count |
+| ------------------ | ------: |
+| `gameplay_advice`  |      67 |
+| `lore_analysis`    |      67 |
+| `reaction_opinion` |      67 |
+| **Total**          | **201** |
+
+No single label accounts for more than 70% of the dataset. The dataset is balanced across the three labels, which should help prevent the model from mostly predicting one majority class.
+
+### Difficult Annotation Cases
+
+#### Difficult Case 1
+
+**Text:** “Is Neuvillette still worth pulling, or is he overrated now?”
+**Possible labels:** `gameplay_advice` vs. `reaction_opinion`
+**Final label:** `gameplay_advice`
+**Reason:** The word “overrated” makes it sound like an opinion post, but the main purpose is asking whether the character is worth pulling.
+
+#### Difficult Case 2
+
+**Text:** “Artifact farming is bad because it takes too much resin and the RNG makes progress feel impossible.”
+**Possible labels:** `gameplay_advice` vs. `reaction_opinion`
+**Final label:** `reaction_opinion`
+**Reason:** The post talks about a gameplay system, but it mainly expresses frustration instead of asking for or giving practical build advice.
+
+#### Difficult Case 3
+
+**Text:** “Yeah I agree, Dainsleif and sibling journeyed after. Who knows what the details are, if sibling tried to help save Khaenri'ah or only met Dainsleif after it was destroyed and didn't know about the history until after learning about it and talking to Dainsleif. At which some point they started to hate Dainsleif's attitude or perspectives of Khaneri'ah or Abyss Order and joined the Abyss Order to right the wrongs. Meanwhile Dainsleif has some other opinion or objectives regarding why the Abyss Order is going about it all wrong...”
+**Possible labels:** `lore_analysis` vs. `reaction_opinion`
+**Final label:** `lore_analysis`
+**Reason:** The post includes speculation, but it is mainly explaining story events, character motivations, Khaenri'ah, Dainsleif, and the Abyss Order.
+
+### Annotation Reflection
+
+The hardest examples were usually about characters, banners, artifact farming, or story speculation. These posts sometimes mixed opinion language with gameplay advice or lore interpretation. To stay consistent, I labeled each example based on its main purpose. If the post was mainly asking for practical help, I labeled it `gameplay_advice`. If it was mainly interpreting story, characters, or worldbuilding, I labeled it `lore_analysis`. If it mostly expressed a feeling, complaint, praise, or unsupported opinion, I labeled it `reaction_opinion`.
+
+---
+
 ## Evaluation Metrics
 
 Accuracy alone is not enough for this task because the dataset may not be perfectly balanced, and some labels may be easier for the model to predict than others. A model could get decent accuracy by doing well on the most common label while still performing poorly on a less common label like `lore_analysis`.
@@ -238,6 +284,8 @@ To track this, my dataset will include separate columns such as:
 | `notes`              | Any uncertainty or edge case explanation |
 
 If I use AI pre-labeling, I will disclose this in my AI usage section. If I decide not to use AI pre-labeling, I will label everything manually and only use AI for stress-testing and failure analysis.
+
+For Milestone 3, I used an AI tool to help organize the dataset and suggest labels for some examples. I reviewed the labels against my own definitions before using them in the final dataset. I will disclose this in the README AI Usage section because AI assistance was part of the annotation workflow.
 
 ### Failure Analysis
 
