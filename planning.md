@@ -299,3 +299,56 @@ After training and evaluating the model, I will collect the wrong predictions an
 I will verify these patterns myself by reading the incorrect predictions. I will not assume the AI's failure analysis is correct without checking the examples. The final evaluation write-up will include both the model's metrics and my own interpretation of where the classifier works and where it falls apart.
 
 ---
+
+## Stretch Feature Plan
+
+### Stretch Feature 1: Inter-Annotator Reliability
+
+Before training the final model, I may ask another person to independently label at least 30 examples from my dataset using my label definitions. I will not tell them my labels beforehand for those examples. After they label the examples, I will compare their labels with mine.
+
+I will report either simple percentage agreement or Cohen’s kappa. Simple percentage agreement is easier to explain, while Cohen’s kappa is stronger because it accounts for agreement by chance.
+
+I will also analyze disagreements. For example, if we disagree mostly between `gameplay_advice` and `reaction_opinion`, that would show that my boundary between practical advice and opinion language may still be difficult.
+
+### Stretch Feature 2: Confidence Calibration
+
+After evaluating the fine-tuned model, I will check whether the model’s confidence scores are meaningful. I will group predictions by confidence range and compare the confidence level to actual accuracy.
+
+Possible confidence groups:
+
+| Confidence Range | What I Will Check                          |
+| ---------------- | ------------------------------------------ |
+| 90–100%          | Should usually be correct                  |
+| 70–89%           | Should be mostly correct but less reliable |
+| 50–69%           | Should contain more mistakes               |
+| Below 50%        | Should be treated as uncertain             |
+
+If high-confidence predictions are often wrong, then the model is overconfident. If low-confidence predictions are usually wrong or ambiguous, that means confidence may be useful for identifying examples that need human review.
+
+### Stretch Feature 3: Error Pattern Analysis
+
+Beyond listing individual wrong predictions, I will look for a systematic pattern across the model’s errors. I will group wrong predictions by label pair and post type.
+
+I will look for patterns such as:
+
+- The model misclassifies short gameplay complaints as `gameplay_advice`
+- The model misclassifies emotional lore posts as `reaction_opinion`
+- The model relies too much on character names instead of the actual purpose of the post
+- The model struggles when a post includes both opinion language and practical advice
+
+If I find a repeated pattern, I will describe it in the README with supporting examples from the error set.
+
+### Stretch Feature 4: Deployed Interface
+
+If time allows, I will build a simple interface that accepts a new Genshin-related post or comment as input and displays the predicted label and confidence score.
+
+The interface can be simple. It may be a small Python app, notebook cell, Streamlit app, or web page depending on what is easiest to connect to the trained model.
+
+The interface should allow a user to:
+
+1. Enter or paste a post/comment.
+2. Click a button or run a function.
+3. See the predicted label.
+4. See the confidence score.
+
+If I complete this stretch feature, I will commit the interface code to the repo and document how to run it in the README.
